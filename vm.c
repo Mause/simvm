@@ -70,3 +70,17 @@ void print_stack(VM* vm) {
     printf("\n");
 }
 
+
+int evaluate(int instructions[]) {
+    VM* vm;
+    int val;
+
+    vm = vm_create();
+    vm->instructions = instructions;
+    execute(vm);
+    val = vm->stack[0];
+    // print_stack(vm);
+    free(vm);
+
+    return val;
+}

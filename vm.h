@@ -33,6 +33,7 @@ void push(VM* vm, int val);
 void execute(VM* vm);
 VM* vm_create(void);
 void print_stack(VM* vm);
+int evaluate(int instructions[]);
 
 
 #endif
