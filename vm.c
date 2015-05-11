@@ -43,7 +43,15 @@ void execute(VM* vm) {
             case NOP:            break;
             case POP:  pop(vm);  break;
             case HALT: halt = 1; break;
-            default: fprintf(stderr, "Unknown instruction at address %d\n", vm->registers[PC]); exit(-1);
+            default: {
+                fprintf(
+                    stderr,
+                    "Unknown instruction at address %d: %d\n",
+                    vm->registers[PC],
+                    vm->instructions[vm->registers[PC]]
+                );
+                exit(-1);
+            }
         }
     }
 }
