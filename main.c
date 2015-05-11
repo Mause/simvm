@@ -36,6 +36,7 @@ int main(int argc, const char* argv[]) {
         fclose(file);
 
         printf("%d\n", evaluate(instructions));
+        free(instructions);
 
         return 0;
     }
