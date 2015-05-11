@@ -162,7 +162,10 @@ int main(int argc, const char *argv[]) {
     }
 
     outfile = fopen(outname, "wb");
-    if (outfile == NULL) return -1;
+    if (outfile == NULL) {
+        perror("Couldn't open output file");
+        return -1;
+    }
 
     write_out(ll, outfile);
 
