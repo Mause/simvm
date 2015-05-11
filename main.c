@@ -23,14 +23,19 @@ int main(int argc, const char* argv[]) {
         return -1;
 
     } else {
-        printf(
-            "%d\n",
-            evaluate(
-                read_from_file(
-                    fopen(argv[1], "rb")
-                )
-            )
-        );
+        int* instructions;
+        FILE* file;
+
+        file = fopen(argv[1], "rb");
+        if (file == NULL) {
+            perror("Couldn't open input file");
+            return -1;
+        }
+
+        instructions = read_from_file(file);
+        fclose(file);
+
+        printf("%d\n", evaluate(instructions));
 
         return 0;
     }
