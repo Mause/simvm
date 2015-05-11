@@ -8,10 +8,10 @@ int fetch(VM* vm) {
 
 int pop(VM* vm) {
     int val = vm->stack[vm->registers[SP]];
+
     vm->stack[vm->registers[SP]] = 0;
     vm->registers[SP]--;
-    //int val = vm->stack[vm->registers[SP]--];
-//    vm->stack[vm->registers[SP] + 1] = 0;
+
     return val;
 }
 
@@ -22,10 +22,9 @@ void push(VM* vm, int val) {
 
 
 void execute(VM* vm) {
-    int halt = 0;
+    int inst, halt = 0;
     while (!halt) {
-        print_stack(vm);
-        int inst = fetch(vm);
+        inst = fetch(vm);
 
         switch(inst) {
             case ADD:  push(vm, pop(vm) + pop(vm)); break;
@@ -55,13 +54,15 @@ VM* vm_create(void) {
 
     vm->registers[PC] = 0;
     vm->registers[SP] = -1;
+    memset(vm->stack, 0, STACK_SIZE);
 
     return vm;
 }
 
 
 void print_stack(VM* vm) {
-    for (int i=0; i<STACK_SIZE; i++) {
+    int i;
+    for (i=0; i<STACK_SIZE; i++) {
         printf("%d", vm->stack[i]);
         if (i != (STACK_SIZE - 1)) {
             printf(", ");

@@ -9,6 +9,7 @@
 #define STACK_SIZE 32
 #define MEMORY_SIZE 1024
 
+
 enum REGISTER {
     A, B, C, D, E, F, SP, PC, NUM_REGISTERS
 };
@@ -24,6 +25,7 @@ typedef enum {
     SET, GLD, GPT, POP, PUSH,
     HALT, IFN, NOP
 } Instruction;
+
 #define HLT HALT
 #define PSH PUSH
 
