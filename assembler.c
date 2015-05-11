@@ -3,7 +3,8 @@
 #define EQ(a, b) (strcmp(a, b) == 0)
 
 typedef struct {
-    int opcode, a, b;
+    int opcode;
+    int args[3];
 } Opcode;
 
 typedef struct LLNode {
@@ -62,7 +63,8 @@ Opcode* parse_opcode(Instruction instr, char* line) {
     char buffer[1024];
 
     opcode = malloc(sizeof(*opcode));
-    opcode->opcode = opcode->a = opcode->b = -1;
+    opcode->opcode = -1;
+    memset(opcode->args, -1, 3);
 
     switch(instr) {
         case ADD: case SUB: case MUL: case POP: case NOP: case HALT: {
@@ -71,14 +73,26 @@ Opcode* parse_opcode(Instruction instr, char* line) {
         }
         case GLD: case GPT: {
             opcode->opcode = instr;
-            assert(sscanf(line, "%s %c", buffer, &(opcode->a)) == 2);
-            opcode->b = -1;
+            assert(sscanf(line, "%s %c", buffer, &(opcode->args[0])) == 2);
+            memset(opcode->args + 1, -1, 2);
             break;
         }
         case PUSH: {
             opcode->opcode = instr;
-            assert(sscanf(line, "%s %d", buffer, &(opcode->a)) == 2);
-            opcode->b = -1;
+            assert(sscanf(line, "%s %d", buffer, &(opcode->args[0])) == 2);
+            memset(opcode->args + 1, -1, 2);
+            break;
+        }
+        case IFN: {
+            opcode->opcode = instr;
+            assert(sscanf(
+                line,
+                "%s %c %d %d",
+                buffer,
+                &(opcode->args[0]),
+                &(opcode->args[1]),
+                &(opcode->args[2])
+            ) == 4);
             break;
         }
 
@@ -105,7 +119,13 @@ LL* parse_opcodes(FILE* file) {
             ll,
             parse_opcode(i_ident, line)
         );
-        printf("%s(%d) %d %d\n", opcode, i_ident, ll->tail->val->a, ll->tail->val->b);
+        printf(
+            "%s(%d) %d %d %d\n",
+            opcode, i_ident,
+            ll->tail->val->args[0],
+            ll->tail->val->args[1],
+            ll->tail->val->args[2]
+        );
     }
 
     return ll;
@@ -114,21 +134,15 @@ LL* parse_opcodes(FILE* file) {
 
 void write_out(LL* ll, FILE* file) {
     LLNode* current;
+    int i;
 
     current = ll->head;
 
     while (current != NULL) {
         fputc(current->val->opcode, file);
-        switch(arg_nums[current->val->opcode]) {
-            case 0: break;
-            case 1: {
-                fputc(current->val->a, file); break;
-            }
-            case 2: {
-                fputc(current->val->a, file);
-                fputc(current->val->b, file);
-                break;
-            }
+
+        for(i=0; i<arg_nums[current->val->opcode]; i++) {
+            fputc(current->val->args[i], file);
         }
 
         current = current->next;
