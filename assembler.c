@@ -154,8 +154,12 @@ int main(int argc, const char *argv[]) {
 
     ll = parse_opcodes(file);
 
-    outname = strtok(argv[1], ".");
-    strcat(outname, ".bin");
+    if (argc == 3) {
+        outname = argv[2];
+    } else {
+        outname = strtok(argv[1], ".");
+        strcat(outname, ".bin");
+    }
 
     outfile = fopen(outname, "wb");
     if (outfile == NULL) return -1;
