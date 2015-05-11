@@ -14,5 +14,12 @@ assembler: assembler.c
 	$(CC) assembler.c -o assembler
 
 
+REMOVE = main test assembler *.obj *.bin *.exe
+
+
 clean:
-	rm -f main
+	rm -f $(REMOVE)
+
+
+clean_win:
+	del $(REMOVE)
