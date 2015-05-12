@@ -7,16 +7,28 @@ int fetch(VM* vm) {
 
 
 int pop(VM* vm) {
-    int val = vm->stack[vm->registers[SP]];
+    int val;
 
+    if (vm->registers[SP] == -1) {
+        fprintf(stderr, "Error: pop while stack empty\n");
+        exit(-1);
+    }
+
+    val = vm->stack[vm->registers[SP]];
     vm->stack[vm->registers[SP]] = 0;
     vm->registers[SP]--;
+
 
     return val;
 }
 
 
 void push(VM* vm, int val) {
+    if (vm->registers[SP] == STACK_SIZE) {
+        fprintf(stderr, "Error: push while stack full\n");
+        exit(-1);
+    }
+
     vm->stack[++vm->registers[SP]] = val;
 }
 
