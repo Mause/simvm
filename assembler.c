@@ -258,6 +258,11 @@ int main(int argc, const char *argv[]) {
     }
 
     ll = parse_opcodes(file);
+    if (ll == NULL) {
+        fprintf(stderr, "An error occured during parsing of the input file\n");
+        return -1;
+    }
+    fclose(file);
 
     if (argc == 3) {
         outname = argv[2];
@@ -273,6 +278,7 @@ int main(int argc, const char *argv[]) {
     }
 
     write_out(ll, outfile);
+    fclose(outfile);
 
     ll_free(ll, free);
 
