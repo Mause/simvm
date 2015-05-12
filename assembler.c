@@ -143,9 +143,25 @@ Opcode* parse_opcode(Instruction instr, char* line) {
     return opcode;
 }
 
-char* lstrip(char* in) {
-    while (in != NULL && isspace(in)) in++;
-    return in;
+
+// https://stackoverflow.com/questions/122616/
+char* lstrip(char* str) {
+    char *end;
+
+    // Trim leading space
+    while(isspace(*str)) str++;
+
+    if(*str == 0)  // All spaces?
+        return str;
+
+    // Trim trailing space
+    end = str + strlen(str) - 1;
+    while(end > str && isspace(*end)) end--;
+
+    // Write new null terminator
+    *(end+1) = 0;
+
+    return str;
 }
 
 LL* parse_opcodes(FILE* file) {
