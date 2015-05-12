@@ -159,13 +159,14 @@ char* lstrip(char* str) {
 
 
 LL* parse_opcodes(FILE* file) {
-    int i_ident;
+    int i_ident, line_no=0;
     char line[1024];
     LL* ll = ll_create();
 
     while (fgets(line, (size_t)1024, file) != NULL) {
         Opcode* val;
         char *opcode, *stripped;
+        line_no++;
 
         stripped = lstrip(line);
         if (stripped[0] == '#' || stripped[0] == '\0') { // comment or empty line
@@ -185,7 +186,7 @@ LL* parse_opcodes(FILE* file) {
 
         i_ident = identify_instruction(opcode);
         if (i_ident == -1) {
-            fprintf(stderr, "Unknown instruction: %s\n", opcode);
+            fprintf(stderr, "Unknown instruction on line %d: \"%s\"\n", line_no, opcode);
             free(opcode);
             ll_free(ll, free);
             return NULL;
@@ -194,7 +195,7 @@ LL* parse_opcodes(FILE* file) {
 
         val = parse_opcode(i_ident, stripped);
         if (val == NULL) {
-            printf("invalid line: %s\n", stripped);
+            printf("Invalid line on line %d: \"%s\"\n", line_no, stripped);
             continue;
         }
         append(ll, val);
