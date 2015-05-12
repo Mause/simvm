@@ -20,6 +20,17 @@ void push(VM* vm, int val) {
     vm->stack[++vm->registers[SP]] = val;
 }
 
+int reg(int val) {
+    int valid = 0 <= val && val < NUM_REGISTERS;
+
+    if (!valid) {
+        fprintf(stderr, "Invalid register: %d\n", val);
+        exit(-1);
+    }
+
+    return val;
+}
+
 
 void execute(VM* vm) {
     int inst, halt = 0;
@@ -32,10 +43,10 @@ void execute(VM* vm) {
             case MUL:  push(vm, pop(vm) * pop(vm)); break;
             case PUSH: push(vm, fetch(vm));         break;
             case GLD:  push(vm, vm->registers[fetch(vm)]);   break;
-            case GPT:  vm->registers[fetch(vm)] = pop(vm);   break;
-            case SET:  vm->registers[fetch(vm)] = fetch(vm); break;
+            case GPT:  vm->registers[reg(fetch(vm))] = pop(vm);   break;
+            case SET:  vm->registers[reg(fetch(vm))] = fetch(vm); break;
             case IFN: {
-                if (vm->registers[fetch(vm)] != fetch(vm)) {
+                if (vm->registers[reg(fetch(vm))] != fetch(vm)) {
                     vm->registers[PC       ] =  fetch(vm);
                 }
                 break;
