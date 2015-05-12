@@ -1,7 +1,5 @@
 #include "vm.h"
 
-#define EQ(a, b) (strcmp(a, b) == 0)
-
 typedef struct {char* name; int val;} Entry;
 
 typedef struct {
@@ -92,7 +90,9 @@ Opcode* parse_opcode(Instruction instr, char* line) {
 
     opcode = malloc(sizeof(*opcode));
     opcode->opcode = -1;
-    memset(opcode->args, -1, 3);
+    opcode->args[0] = -1;
+    opcode->args[1] = -1;
+    opcode->args[2] = -1;
 
     switch(instr) {
         case ADD: case SUB: case MUL: case POP: case NOP: case HALT: {
@@ -102,7 +102,6 @@ Opcode* parse_opcode(Instruction instr, char* line) {
         case GLD: case GPT: {
             opcode->opcode = instr;
             assert(sscanf(line, "%s %s", buffer, registerr) == 2);
-            memset(opcode->args + 1, -1, 2);
             opcode->args[0] = identify_register(registerr);
             if (opcode->args[0] == -1) {
                 fprintf(stderr, "Invalid register: %s\n", registerr);
@@ -113,7 +112,6 @@ Opcode* parse_opcode(Instruction instr, char* line) {
         case PUSH: {
             opcode->opcode = instr;
             assert(sscanf(line, "%s %d", buffer, &(opcode->args[0])) == 2);
-            memset(opcode->args + 1, -1, 2);
             break;
         }
         case IFN: {
