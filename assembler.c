@@ -16,6 +16,11 @@ typedef struct LLNode {
 
 typedef struct { LLNode *head, *tail; } LL;
 
+static Entry REGISTER_MAP[] = {
+    {"A", A}, {"B", B}, {"C", C}, {"D", D}, {"E", E}, {"F", F},
+    {"SP", SP}, {"PC", PC}, {NULL, -1}
+};
+
 static Entry OPCODE_MAP[] = {
     {"ADD", ADD},  {"GLD", GLD},   {"GPT", GPT},
     {"IFN", IFN},  {"LOG", LOG},   {"MUL", MUL},
@@ -72,6 +77,7 @@ int find(Entry map[], char* ident) {
 }
 
 Instruction identify_instruction(char* ident) { return find(OPCODE_MAP,   ident); }
+        int identify_register   (char* ident) { return find(REGISTER_MAP, ident); }
 
 
 static int OPCODE_ARG_NUMS[] = {
@@ -82,6 +88,7 @@ static int OPCODE_ARG_NUMS[] = {
 Opcode* parse_opcode(Instruction instr, char* line) {
     Opcode* opcode;
     char buffer[1024];
+    char registerr[3];
 
     opcode = malloc(sizeof(*opcode));
     opcode->opcode = -1;
@@ -94,8 +101,13 @@ Opcode* parse_opcode(Instruction instr, char* line) {
         }
         case GLD: case GPT: {
             opcode->opcode = instr;
-            assert(sscanf(line, "%s %c", buffer, &(opcode->args[0])) == 2);
+            assert(sscanf(line, "%s %s", buffer, registerr) == 2);
             memset(opcode->args + 1, -1, 2);
+            opcode->args[0] = identify_register(registerr);
+            if (opcode->args[0] == -1) {
+                fprintf(stderr, "Invalid register: %s\n", registerr);
+                return NULL;
+            }
             break;
         }
         case PUSH: {
@@ -108,12 +120,17 @@ Opcode* parse_opcode(Instruction instr, char* line) {
             opcode->opcode = instr;
             assert(sscanf(
                 line,
-                "%s %c %d %d",
+                "%s %s %d %d",
                 buffer,
-                &(opcode->args[0]),
+                registerr,
                 &(opcode->args[1]),
                 &(opcode->args[2])
             ) == 4);
+            opcode->args[0] = identify_register(registerr);
+            if (opcode->args[0] == -1) {
+                fprintf(stderr, "Invalid register: %s\n", registerr);
+                return NULL;
+            }
             break;
         }
 
