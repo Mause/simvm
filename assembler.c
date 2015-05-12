@@ -152,11 +152,12 @@ LL* parse_opcodes(FILE* file) {
         i_ident = identify_instruction(opcode);
         assert(i_ident != -1);
 
-        append(
-            ll,
-            parse_opcode(i_ident, line)
-        );
-        val = ll->tail->val;
+        val = parse_opcode(i_ident, line);
+        if (val == NULL) {
+            printf("invalid line: %s\n", line);
+            continue;
+        }
+        append(ll, val);
         printf(
             "%s(%d) %d %d %d\n",
             opcode, i_ident,
