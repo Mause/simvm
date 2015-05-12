@@ -198,9 +198,11 @@ LL* parse_opcodes(FILE* file) {
         i_ident = identify_instruction(opcode);
         if (i_ident == -1) {
             fprintf(stderr, "Unknown instruction: %s\n", opcode);
+            free(opcode);
             ll_free(ll, free);
             return NULL;
         }
+        free(opcode);
 
         val = parse_opcode(i_ident, stripped);
         if (val == NULL) {
@@ -216,7 +218,6 @@ LL* parse_opcodes(FILE* file) {
             val->args[2]
         );
 
-        free(opcode);
     }
 
     return ll;
