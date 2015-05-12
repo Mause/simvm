@@ -2,6 +2,8 @@
 
 #define EQ(a, b) (strcmp(a, b) == 0)
 
+typedef struct {char* name; int val;} Entry;
+
 typedef struct {
     int opcode;
     int args[3];
@@ -13,6 +15,14 @@ typedef struct LLNode {
 } LLNode;
 
 typedef struct { LLNode *head, *tail; } LL;
+
+static Entry OPCODE_MAP[] = {
+    {"ADD", ADD},  {"GLD", GLD},   {"GPT", GPT},
+    {"IFN", IFN},  {"LOG", LOG},   {"MUL", MUL},
+    {"NOP", NOP},  {"POP", POP},   {"SET", SET},
+    {"SUB", SUB},  {"HLT", HALT},  {"HALT", HALT},
+    {"PSH", PUSH}, {"PUSH", PUSH}, {NULL, -1}
+};
 
 LL* ll_create(void) {
     LL* ll = malloc(sizeof(LL));
@@ -34,15 +44,6 @@ void append(LL* n, Opcode* val) {
     n->tail = new_node;
     old_tail->next = new_node;
 }
-
-typedef struct {char* name; int val;} Entry;
-static Entry OPCODE_MAP[] = {
-    {"ADD", ADD},  {"GLD", GLD},   {"GPT", GPT},
-    {"IFN", IFN},  {"LOG", LOG},   {"MUL", MUL},
-    {"NOP", NOP},  {"POP", POP},   {"SET", SET},
-    {"SUB", SUB},  {"HLT", HALT},  {"HALT", HALT},
-    {"PSH", PUSH}, {"PUSH", PUSH}, {NULL, -1}
-};
 
 int find(Entry map[], char* ident) {
     int i = 0;
