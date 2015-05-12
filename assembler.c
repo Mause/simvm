@@ -35,23 +35,28 @@ void append(LL* n, Opcode* val) {
     old_tail->next = new_node;
 }
 
+typedef struct {char* name; int val;} Entry;
+static Entry OPCODE_MAP[] = {
+    {"ADD", ADD},  {"GLD", GLD},   {"GPT", GPT},
+    {"IFN", IFN},  {"LOG", LOG},   {"MUL", MUL},
+    {"NOP", NOP},  {"POP", POP},   {"SET", SET},
+    {"SUB", SUB},  {"HLT", HALT},  {"HALT", HALT},
+    {"PSH", PUSH}, {"PUSH", PUSH}, {NULL, -1}
+};
 
-Instruction identify_instruction(char* ident) {
-         if (EQ(ident, "ADD")) return ADD;
-    else if (EQ(ident, "GLD")) return GLD;
-    else if (EQ(ident, "GPT")) return GPT;
-    else if (EQ(ident, "IFN")) return IFN;
-    else if (EQ(ident, "LOG")) return LOG;
-    else if (EQ(ident, "MUL")) return MUL;
-    else if (EQ(ident, "NOP")) return NOP;
-    else if (EQ(ident, "POP")) return POP;
-    else if (EQ(ident, "SET")) return SET;
-    else if (EQ(ident, "SUB")) return SUB;
-    else if (EQ(ident, "HLT") || EQ(ident, "HALT")) return HALT;
-    else if (EQ(ident, "PSH") || EQ(ident, "PUSH")) return PUSH;
-    else return -1;
+int find(Entry map[], char* ident) {
+    int i = 0;
+
+    for (i=0; map[i].name != NULL; i++) {
+        if (strcmp(map[i].name, ident) == 0) {
+            return map[i].val;
+        }
+    }
+
+    return -1;
 }
 
+Instruction identify_instruction(char* ident) { return find(OPCODE_MAP,   ident); }
 
 
 static int OPCODE_ARG_NUMS[] = {
