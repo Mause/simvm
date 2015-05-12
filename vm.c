@@ -55,11 +55,14 @@ void execute(VM* vm) {
             case POP:  pop(vm);  break;
             case HALT: halt = 1; break;
             default: {
+                int unknown = vm->instructions[vm->registers[PC]];
                 fprintf(
                     stderr,
-                    "Unknown instruction at address %d: %d\n",
+                    "Unknown instruction at address %d: %d / 0x%x / %c\n",
                     vm->registers[PC],
-                    vm->instructions[vm->registers[PC]]
+                    unknown,
+                    unknown,
+                    unknown
                 );
                 exit(-1);
             }
