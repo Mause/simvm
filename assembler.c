@@ -138,6 +138,11 @@ Opcode* parse_opcode(Instruction instr, char* line) {
     return opcode;
 }
 
+char* lstrip(char* in) {
+    while (in != NULL && isspace(in)) in++;
+    return in;
+}
+
 LL* parse_opcodes(FILE* file) {
     int i_ident;
     char line[1024];
@@ -145,8 +150,11 @@ LL* parse_opcodes(FILE* file) {
 
     while (fgets(line, (size_t)1024, file) != NULL) {
         Opcode* val;
-        char* opcode = malloc(sizeof(char) * strlen(line));
+        char *opcode;
 
+        if (lstrip(line)[0] == '#') continue;
+
+        opcode = malloc(sizeof(char) * strlen(line));
         assert(sscanf(line, "%s", opcode) == 1);
 
         i_ident = identify_instruction(opcode);
