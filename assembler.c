@@ -39,6 +39,7 @@ LL* ll_create(void) {
     return ll;
 }
 
+
 void ll_free(LL* ll, void(*freer)(void*)) {
     LLNode *current, *next=ll->head;
 
@@ -50,6 +51,7 @@ void ll_free(LL* ll, void(*freer)(void*)) {
     }
     free(ll);
 }
+
 
 void append(LL* n, Opcode* val) {
     LLNode *new_node, *old_tail;
@@ -67,6 +69,7 @@ void append(LL* n, Opcode* val) {
     old_tail->next = new_node;
 }
 
+
 int find(Entry map[], char* ident) {
     int i = 0;
 
@@ -78,6 +81,7 @@ int find(Entry map[], char* ident) {
 
     return -1;
 }
+
 
 Instruction identify_instruction(char* ident) { return find(OPCODE_MAP,   ident); }
         int identify_register   (char* ident) { return find(REGISTER_MAP, ident); }
@@ -163,6 +167,7 @@ char* lstrip(char* str) {
 
     return str;
 }
+
 
 LL* parse_opcodes(FILE* file) {
     int i_ident;

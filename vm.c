@@ -20,6 +20,7 @@ void push(VM* vm, int val) {
     vm->stack[++vm->registers[SP]] = val;
 }
 
+
 int reg(int val) {
     int valid = 0 <= val && val < NUM_REGISTERS;
 
