@@ -30,6 +30,18 @@ LL* ll_create(void) {
     return ll;
 }
 
+void ll_free(LL* ll, void(*freer)(void*)) {
+    LLNode *current, *next=ll->head;
+
+    while (next != NULL) {
+        current = next;
+        next = next->next;
+        freer(current->val);
+        free(current);
+    }
+    free(ll);
+}
+
 void append(LL* n, Opcode* val) {
     LLNode *new_node, *old_tail;
 
@@ -189,6 +201,8 @@ int main(int argc, const char *argv[]) {
     }
 
     write_out(ll, outfile);
+
+    ll_free(ll, free);
 
     return 0;
 }
