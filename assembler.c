@@ -192,7 +192,7 @@ LL* parse_opcodes(FILE* file) {
         it will crash
         */
 
-        opcode = malloc(sizeof(char) * strlen(line));
+        opcode = malloc((sizeof(char) * strlen(line)) + 1);
         assert(sscanf(stripped, "%s", opcode) == 1);
 
         i_ident = identify_instruction(opcode);
