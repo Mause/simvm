@@ -183,6 +183,14 @@ LL* parse_opcodes(FILE* file) {
             continue;
         }
 
+        /*
+        We ignore lines that start with a hash, but for lines that have comments
+        after instructions, we don't actually parse the rest of the line after
+        a valid instruction. What this means is that if an invalid instruction,
+        with not enough arguments passed, for example, is followed by a comment,
+        it will crash
+        */
+
         opcode = malloc(sizeof(char) * strlen(line));
         assert(sscanf(stripped, "%s", opcode) == 1);
 
