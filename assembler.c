@@ -166,17 +166,17 @@ char* lstrip(char* str) {
 
 LL* parse_opcodes(FILE* file) {
     int i_ident;
-    char line[1024], *stripped_line;
+    char line[1024];
     LL* ll = ll_create();
 
     while (fgets(line, (size_t)1024, file) != NULL) {
         Opcode* val;
-        char *opcode;
+        char *opcode, *stripped;
 
-        stripped_line = lstrip(line);
-        if (line[0] == '#') continue;
-        if (line[0] == '\r' && line[1] == '\n') continue;
-        if (line[1] == '\n') continue;
+        stripped = lstrip(line);
+        if (stripped[0] == '#' || stripped[0] == '\0') { // comment or empty line
+            continue;
+        }
 
         opcode = malloc(sizeof(char) * strlen(line));
         assert(sscanf(line, "%s", opcode) == 1);
