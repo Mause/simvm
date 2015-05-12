@@ -144,6 +144,7 @@ LL* parse_opcodes(FILE* file) {
     LL* ll = ll_create();
 
     while (fgets(line, (size_t)1024, file) != NULL) {
+        Opcode* val;
         char* opcode = malloc(sizeof(char) * strlen(line));
 
         assert(sscanf(line, "%s", opcode) == 1);
@@ -155,12 +156,13 @@ LL* parse_opcodes(FILE* file) {
             ll,
             parse_opcode(i_ident, line)
         );
+        val = ll->tail->val;
         printf(
             "%s(%d) %d %d %d\n",
             opcode, i_ident,
-            ll->tail->val->args[0],
-            ll->tail->val->args[1],
-            ll->tail->val->args[2]
+            val->args[0],
+            val->args[1],
+            val->args[2]
         );
 
         free(opcode);
