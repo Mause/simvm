@@ -182,7 +182,11 @@ LL* parse_opcodes(FILE* file) {
         assert(sscanf(stripped, "%s", opcode) == 1);
 
         i_ident = identify_instruction(opcode);
-        assert(i_ident != -1);
+        if (i_ident == -1) {
+            fprintf(stderr, "Unknown instruction: %s\n", opcode);
+            ll_free(ll, free);
+            return NULL;
+        }
 
         val = parse_opcode(i_ident, stripped);
         if (val == NULL) {
