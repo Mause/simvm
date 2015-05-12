@@ -11,7 +11,7 @@ test: test.c vm.h vm.c
 
 
 assembler: assembler.c
-	$(CC) assembler.c -o assembler
+	$(CC) $(CFLAGS) assembler.c -o assembler
 
 
 REMOVE = main test assembler *.obj *.bin *.exe
