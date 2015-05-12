@@ -1,3 +1,8 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h> // for isspace
+
 #include "vm.h"
 
 typedef struct {char* name; int val;} Entry;
