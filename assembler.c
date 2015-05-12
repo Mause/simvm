@@ -53,7 +53,8 @@ Instruction identify_instruction(char* ident) {
 }
 
 
-static int arg_nums[] = {
+
+static int OPCODE_ARG_NUMS[] = {
   // ADD, SUB, MUL, LOG, SET, GLD, GPT, POP, PUSH, HALT, IFN, NOP
      0,   0,   0,   1,   2,   1,   1,   0,   1,    0,    3,   0
 };
@@ -141,7 +142,7 @@ void write_out(LL* ll, FILE* file) {
     while (current != NULL) {
         fputc(current->val->opcode, file);
 
-        for(i=0; i<arg_nums[current->val->opcode]; i++) {
+        for(i=0; i<OPCODE_ARG_NUMS[current->val->opcode]; i++) {
             fputc(current->val->args[i], file);
         }
 
