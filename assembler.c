@@ -179,14 +179,14 @@ LL* parse_opcodes(FILE* file) {
         }
 
         opcode = malloc(sizeof(char) * strlen(line));
-        assert(sscanf(line, "%s", opcode) == 1);
+        assert(sscanf(stripped, "%s", opcode) == 1);
 
         i_ident = identify_instruction(opcode);
         assert(i_ident != -1);
 
-        val = parse_opcode(i_ident, line);
+        val = parse_opcode(i_ident, stripped);
         if (val == NULL) {
-            printf("invalid line: %s\n", line);
+            printf("invalid line: %s\n", stripped);
             continue;
         }
         append(ll, val);
