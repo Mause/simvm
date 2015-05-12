@@ -32,6 +32,12 @@ static Entry OPCODE_MAP[] = {
     {"PSH", PUSH}, {"PUSH", PUSH}, {NULL, -1}
 };
 
+static int OPCODE_ARG_NUMS[] = {
+  // ADD, SUB, MUL, LOG, SET, GLD, GPT, POP, PUSH, HALT, IFN, NOP
+     0,   0,   0,   1,   2,   1,   1,   0,   1,    0,    3,   0
+};
+
+
 LL* ll_create(void) {
     LL* ll = malloc(sizeof(*ll));
     ll->head = NULL;
@@ -86,11 +92,6 @@ int find(Entry map[], char* ident) {
 Instruction identify_instruction(char* ident) { return find(OPCODE_MAP,   ident); }
         int identify_register   (char* ident) { return find(REGISTER_MAP, ident); }
 
-
-static int OPCODE_ARG_NUMS[] = {
-  // ADD, SUB, MUL, LOG, SET, GLD, GPT, POP, PUSH, HALT, IFN, NOP
-     0,   0,   0,   1,   2,   1,   1,   0,   1,    0,    3,   0
-};
 
 Opcode* parse_opcode(Instruction instr, char* line) {
     Opcode* opcode;
