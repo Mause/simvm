@@ -25,8 +25,9 @@ static Entry OPCODE_MAP[] = {
 };
 
 LL* ll_create(void) {
-    LL* ll = malloc(sizeof(LL));
-    ll->head = ll->tail = NULL;
+    LL* ll = malloc(sizeof(*ll));
+    ll->head = NULL;
+    ll->tail = NULL;
     return ll;
 }
 
@@ -47,6 +48,7 @@ void append(LL* n, Opcode* val) {
 
     new_node = malloc(sizeof(*new_node));
     new_node->val = val;
+    new_node->next = NULL;
 
     if (n->head == NULL && n->tail == NULL) {
         n->head = n->tail = new_node;
@@ -145,6 +147,8 @@ LL* parse_opcodes(FILE* file) {
             ll->tail->val->args[1],
             ll->tail->val->args[2]
         );
+
+        free(opcode);
     }
 
     return ll;
