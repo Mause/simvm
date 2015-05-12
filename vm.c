@@ -49,6 +49,8 @@ void execute(VM* vm) {
             case IFN: {
                 if (vm->registers[reg(fetch(vm))] != fetch(vm)) {
                     vm->registers[PC       ] =  fetch(vm);
+                } else {
+                    fetch(vm); // skip over the address we would have otherwise branched to
                 }
                 break;
             }
