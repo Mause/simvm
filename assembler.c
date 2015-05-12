@@ -242,7 +242,7 @@ void write_out(LL* ll, FILE* file) {
 
 
 int main(int argc, const char *argv[]) {
-    char* outname;
+    char *inname, *outname;
     FILE *file, *outfile;
     LL* ll;
 
@@ -251,7 +251,8 @@ int main(int argc, const char *argv[]) {
         exit(-1);
     }
 
-    file = fopen(argv[1], "rb");
+    inname = strdup(argv[1]);
+    file = fopen(inname, "rb");
     if (file == NULL) {
         perror("Couldn't open file");
         return -1;
@@ -265,9 +266,9 @@ int main(int argc, const char *argv[]) {
     fclose(file);
 
     if (argc == 3) {
-        outname = argv[2];
+        outname = (char*)argv[2];
     } else {
-        outname = strtok(argv[1], ".");
+        outname = strtok(inname, ".");
         strcat(outname, ".bin");
     }
 
@@ -281,6 +282,7 @@ int main(int argc, const char *argv[]) {
     fclose(outfile);
 
     ll_free(ll, free);
+    free(inname);
 
     return 0;
 }
