@@ -1,6 +1,6 @@
 all: main test assembler
 
-CFLAGS = -g -std=c99 -pedantic -Wall -D_XOPEN_SOURCE=500
+CFLAGS = -g -std=c99 -pedantic -Wall -D_XOPEN_SOURCE=500 -D_CRT_SECURE_NO_WARNINGS
 
 main: main.c vm.h vm.c
 	$(CC) $(CFLAGS) main.c vm.c -o main
