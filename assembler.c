@@ -37,6 +37,13 @@ static int OPCODE_ARG_NUMS[] = {
      0,   0,   0,   1,   2,   1,   1,   0,   1,    0,    3,   0
 };
 
+static char* OPCODE_NAMES[] = {
+    "ADD", "SUB", "MUL",
+    "LOG", "SET", "GLD",
+    "GPT", "POP", "PUSH",
+    "HALT", "IFN", "NOP"
+};
+
 
 LL* ll_create(void) {
     LL* ll = malloc(sizeof(*ll));
@@ -97,6 +104,7 @@ Opcode* parse_opcode(Instruction instr, char* line) {
     Opcode* opcode;
     char buffer[1024];
     char registerr[3];
+    int read;
 
     opcode = malloc(sizeof(*opcode));
     opcode->opcode = -1;
@@ -111,7 +119,12 @@ Opcode* parse_opcode(Instruction instr, char* line) {
         }
         case GLD: case GPT: {
             opcode->opcode = instr;
-            assert(sscanf(line, "%s %s", buffer, registerr) == 2);
+            read = sscanf(line, "%s %s", buffer, registerr);
+            if (read != 2) {
+                fprintf(stderr, "Not enough arguments for %s\n", OPCODE_NAMES[instr]);
+                return NULL;
+            }
+
             opcode->args[0] = identify_register(registerr);
             if (opcode->args[0] == -1) {
                 fprintf(stderr, "Invalid register: %s\n", registerr);
@@ -121,19 +134,30 @@ Opcode* parse_opcode(Instruction instr, char* line) {
         }
         case PUSH: {
             opcode->opcode = instr;
-            assert(sscanf(line, "%s %d", buffer, &(opcode->args[0])) == 2);
+            read = sscanf(line, "%s %d", buffer, &(opcode->args[0]));
+            if (read != 2) {
+                fprintf(stderr, "Not enough arguments for %s\n", OPCODE_NAMES[instr]);
+                return NULL;
+            }
+
             break;
         }
         case IFN: {
             opcode->opcode = instr;
-            assert(sscanf(
+            read = sscanf(
                 line,
                 "%s %s %d %d",
                 buffer,
                 registerr,
                 &(opcode->args[1]),
                 &(opcode->args[2])
-            ) == 4);
+            );
+
+            if (read != 4) {
+                fprintf(stderr, "Not enough arguments for %s\n", OPCODE_NAMES[instr]);
+                return NULL;
+            }
+
             opcode->args[0] = identify_register(registerr);
             if (opcode->args[0] == -1) {
                 fprintf(stderr, "Invalid register: %s\n", registerr);
