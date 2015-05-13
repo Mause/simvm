@@ -223,14 +223,6 @@ LL* parse_opcodes(FILE* file) {
             continue;
         }
         append(ll, val);
-        printf(
-            "%s(%d) %d %d %d\n",
-            opcode, i_ident,
-            val->args[0],
-            val->args[1],
-            val->args[2]
-        );
-
     }
 
     return ll;
