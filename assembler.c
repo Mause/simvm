@@ -6,7 +6,7 @@
 #include "vm.h"
 #include "assembler.h"
 
-
+// order does not matter in either of the following
 static Entry REGISTER_MAP[] = {
     {"A", A}, {"B", B}, {"C", C}, {"D", D}, {"E", E}, {"F", F},
     {"SP", SP}, {"PC", PC}, {NULL, -1}
@@ -20,6 +20,7 @@ static Entry OPCODE_MAP[] = {
     {"PSH", PUSH}, {"PUSH", PUSH}, {NULL, -1}
 };
 
+// order is paramount in both of the following
 static int OPCODE_ARG_NUMS[] = {
   // ADD, SUB, MUL, LOG, SET, GLD, GPT, POP, PUSH, HALT, IFN, NOP
      0,   0,   0,   1,   2,   1,   1,   0,   1,    0,    3,   0
@@ -188,9 +189,8 @@ LL* parse_opcodes(FILE* file) {
         /*
         We ignore lines that start with a hash, but for lines that have comments
         after instructions, we don't actually parse the rest of the line after
-        a valid instruction. What this means is that if an invalid instruction,
-        with not enough arguments passed, for example, is followed by a comment,
-        it will crash
+        a valid instruction. This hopefully means we don't have to explicitely
+        handle such comments.
         */
 
         opcode = malloc((sizeof(char) * strlen(line)) + 1);
