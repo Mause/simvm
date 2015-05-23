@@ -233,16 +233,12 @@ void write_out(LL* ll, FILE* file) {
     LLNode* current;
     int i;
 
-    current = ll->head;
-
-    while (current != NULL) {
+    for (current = ll->head; current != NULL; current = current->next) {
         fputc(current->val->opcode, file);
 
         for(i=0; i<OPCODE_ARG_NUMS[current->val->opcode]; i++) {
             fputc(current->val->args[i], file);
         }
-
-        current = current->next;
     }
 }
 
