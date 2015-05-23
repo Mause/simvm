@@ -4,20 +4,8 @@
 #include <ctype.h> // for isspace
 
 #include "vm.h"
+#include "assembler.h"
 
-typedef struct {char* name; int val;} Entry;
-
-typedef struct {
-    int opcode;
-    int args[3];
-} Opcode;
-
-typedef struct LLNode {
-    struct LLNode* next;
-    Opcode* val;
-} LLNode;
-
-typedef struct { LLNode *head, *tail; } LL;
 
 static Entry REGISTER_MAP[] = {
     {"A", A}, {"B", B}, {"C", C}, {"D", D}, {"E", E}, {"F", F},
