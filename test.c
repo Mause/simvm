@@ -9,7 +9,6 @@ int test_a[] = {
     PSH, 12,
     ADD,
     ADD,
-    POP,
     HLT
 };
 
